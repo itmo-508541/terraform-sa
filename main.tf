@@ -62,6 +62,13 @@ resource "yandex_vpc_subnet" "itmo508541-subnet" {
   network_id     = yandex_vpc_network.itmo508541-network.id
 }
 
+resource "yandex_storage_bucket" "itmo508541-tf-state" {
+  folder_id             = var.folder_id
+  bucket                = "itmo508541-tf-state"
+  default_storage_class = "COLD"
+  max_size              = 104857600
+}
+
 ###########
 
 resource "local_file" "key_json" {

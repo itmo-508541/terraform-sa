@@ -49,27 +49,12 @@ resource "yandex_iam_service_account_key" "sa_key" {
   description        = "Key for Yandex Cloud access"
 }
 
-resource "yandex_vpc_network" "itmo508541-network" {
-  name        = "itmo508541-network"
-  description = "sem1-project network"
-}
-
-resource "yandex_vpc_subnet" "itmo508541-subnet" {
-  name           = "itmo508541-subnet"
-  description    = "sem1-project subnet"
-  v4_cidr_blocks = ["10.2.0.0/16"]
-  zone           = var.zone
-  network_id     = yandex_vpc_network.itmo508541-network.id
-}
-
 resource "yandex_storage_bucket" "itmo508541-tf-state" {
   folder_id             = var.folder_id
   bucket                = "itmo508541-tf-state"
   default_storage_class = "COLD"
   max_size              = 104857600
 }
-
-###########
 
 resource "local_file" "key_json" {
   content  = jsonencode({
@@ -80,8 +65,3 @@ resource "local_file" "key_json" {
   })
   filename = "yandex-sa.json"
 }
-
-#output "subnet_id" {
-#  value = yandex_vpc_subnet.itmo508541-subnet.id
-#  description = "subnet-id"
-#}

@@ -24,3 +24,8 @@ variable "zone" {
   type        = string
   description = "Zone"
 }
+
+variable "bucket" {
+  type        = string
+  description = "Bucket for Terraform state storage"
+}

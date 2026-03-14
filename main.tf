@@ -49,9 +49,14 @@ resource "yandex_iam_service_account_key" "sa_key" {
   description        = "Key for Yandex Cloud access"
 }
 
-resource "yandex_storage_bucket" "itmo508541-tf-state" {
+resource "yandex_iam_service_account_static_access_key" "sa_static_key" {
+  service_account_id = yandex_iam_service_account.sa.id
+  description        = "S3 static keys"
+}
+
+resource "yandex_storage_bucket" "tf-state" {
   folder_id             = var.folder_id
-  bucket                = "itmo508541-tf-state"
+  bucket                = var.bucket
   default_storage_class = "COLD"
   max_size              = 104857600
 }
@@ -64,4 +69,13 @@ resource "local_file" "key_json" {
     created_at      = yandex_iam_service_account_key.sa_key.created_at
   })
   filename = "yandex-sa.json"
+}
+
+resource "local_file" "static_key_json" {
+  content = jsonencode({
+    access_key = yandex_iam_service_account_static_access_key.sa_static_key.access_key
+    secret_key = yandex_iam_service_account_static_access_key.sa_static_key.secret_key
+    service_account_id = yandex_iam_service_account_static_access_key.sa_static_key.service_account_id
+  })
+  filename = "yandex-s3.json"
 }
